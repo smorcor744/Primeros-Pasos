@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ba6e7654c84a4449b3d1f6a34209aba, type: 3}
+  m_Name: Shape1
+  m_EditorClassIdentifier: Assembly-CSharp::ShapeSettings
+  planetRadius: 2.72
+  noiseLayers:
+  - enabled: 1
+    useFirstLayerMask: 0
+    strength: 0.09
+    numLayers: 4
+    roughness: 2.24
+    baseRoughness: 0.55
+    persistence: 0.71
+    center: {x: 0, y: 0, z: 0}
+    minValue: 1.28
+  - enabled: 1
+    useFirstLayerMask: 1
+    strength: 0.69
+    numLayers: 5
+    roughness: 2.34
+    baseRoughness: 1.08
+    persistence: 0.52
+    center: {x: 0, y: 0, z: 0}
+    minValue: -0.08
