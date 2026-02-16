@@ -14,21 +14,63 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShapeSettings
   planetRadius: 2.72
   noiseLayers:
-  - enabled: 1
+  - filterType: 0
+    enabled: 1
     useFirstLayerMask: 0
-    strength: 0.09
-    numLayers: 4
-    roughness: 2.24
-    baseRoughness: 0.55
-    persistence: 0.71
-    center: {x: 0, y: 0, z: 0}
-    minValue: 1.28
-  - enabled: 1
+    simpleNoiseSettings:
+      strength: 0.07
+      numLayers: 1
+      baseRoughness: 1.41
+      roughness: 3.38
+      persistence: 16.2
+      center: {x: 0, y: 0, z: 0}
+      minValue: 0.35
+    rigidNoiseSettings:
+      strength: 1
+      numLayers: 1
+      baseRoughness: 1
+      roughness: 2
+      persistence: 0.5
+      center: {x: 0, y: 0, z: 0}
+      minValue: 0
+      weightMultiplier: 0.8
+  - filterType: 0
+    enabled: 1
     useFirstLayerMask: 1
-    strength: 0.69
-    numLayers: 5
-    roughness: 2.34
-    baseRoughness: 1.08
-    persistence: 0.52
-    center: {x: 0, y: 0, z: 0}
-    minValue: -0.08
+    simpleNoiseSettings:
+      strength: 1
+      numLayers: 1
+      baseRoughness: 6.52
+      roughness: 3.77
+      persistence: 0.5
+      center: {x: 0, y: 0, z: 0}
+      minValue: 0
+    rigidNoiseSettings:
+      strength: 1
+      numLayers: 1
+      baseRoughness: 1
+      roughness: 2
+      persistence: 0.5
+      center: {x: 0, y: 0, z: 0}
+      minValue: 0
+      weightMultiplier: 0.8
+  - filterType: 1
+    enabled: 1
+    useFirstLayerMask: 1
+    simpleNoiseSettings:
+      strength: 1
+      numLayers: 1
+      baseRoughness: 1
+      roughness: 2
+      persistence: 0.5
+      center: {x: 0, y: 0, z: 0}
+      minValue: 0
+    rigidNoiseSettings:
+      strength: 0.63
+      numLayers: 1
+      baseRoughness: 2.99
+      roughness: 1.64
+      persistence: 4.22
+      center: {x: 0, y: 0, z: 0}
+      minValue: -0.46
+      weightMultiplier: 1
