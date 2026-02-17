@@ -47,7 +47,7 @@ MonoBehaviour:
         m_NumAlphaKeys: 2
       tint: {r: 0.9245283, g: 0, b: 0, a: 0}
       startHeight: 0
-      tintPercent: 1
+      tintPercent: 0
     - gradient:
         serializedVersion: 2
         key0: {r: 0, g: 0, b: 0, a: 0}
@@ -79,8 +79,8 @@ MonoBehaviour:
         m_NumColorKeys: 2
         m_NumAlphaKeys: 2
       tint: {r: 0, g: 0, b: 0, a: 0}
-      startHeight: 0.605
-      tintPercent: 1
+      startHeight: 0.425
+      tintPercent: 0
     - gradient:
         serializedVersion: 2
         key0: {r: 0, g: 0, b: 0, a: 0}
@@ -112,8 +112,8 @@ MonoBehaviour:
         m_NumColorKeys: 2
         m_NumAlphaKeys: 2
       tint: {r: 1, g: 1, b: 1, a: 0}
-      startHeight: 0.88
-      tintPercent: 1
+      startHeight: 0.846
+      tintPercent: 0
     noise:
       filterType: 0
       enabled: 1
@@ -135,6 +135,6 @@ MonoBehaviour:
         center: {x: 0, y: 0, z: 0}
         minValue: 0
         weightMultiplier: 0.8
-    noiseOffset: 0
-    noiseStrength: 0
-    blendAmount: 0
+    noiseOffset: 0.56
+    noiseStrength: 1.65
+    blendAmount: 0.106
