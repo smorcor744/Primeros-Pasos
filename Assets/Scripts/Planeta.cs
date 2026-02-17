@@ -6,6 +6,9 @@ public class Planeta : MonoBehaviour
     [Range(2, 256)]
     public int resolution = 10;
     public bool autoUpdate = true;
+    public enum FaceRenderMask { All, Top, Bottom, Front, Back, Left, Right };
+    public FaceRenderMask faceRenderMask;
+
     public ShapeSettings shapeSettings;
     public ColorSettings colorSettings;
 
@@ -13,7 +16,8 @@ public class Planeta : MonoBehaviour
     public bool shapeSettingsFoldout;
     [HideInInspector]
     public bool colorSettingsFoldout;
-    ShapeGenerations shapeGenerator;
+    ShapeGenerations shapeGenerator = new ShapeGenerations(); 
+    ColourGenerator colourGenerator = new ColourGenerator();
 
 
     [SerializeField, HideInInspector]
@@ -26,7 +30,8 @@ public class Planeta : MonoBehaviour
     }
     void Initialize()
     {
-        shapeGenerator = new ShapeGenerations(shapeSettings);
+        shapeGenerator.UpdateSettings(shapeSettings);
+        colourGenerator.UpdateSettings(colorSettings);
         if (meshFilter == null || meshFilter.Length == 0)
         {
             meshFilter = new MeshFilter[6];
@@ -40,11 +45,16 @@ public class Planeta : MonoBehaviour
             {
                 GameObject meshObj = new GameObject("mesh");
                 meshObj.transform.parent = transform;
-                meshObj.AddComponent<MeshRenderer>().sharedMaterial = new Material(Shader.Find("Standard"));
+
+                meshObj.AddComponent<MeshRenderer>();
                 meshFilter[i] = meshObj.AddComponent<MeshFilter>();
                 meshFilter[i].mesh = new Mesh();
             }
+            meshFilter[i].GetComponent<MeshRenderer>().sharedMaterial = colorSettings.planetMaterial;
+
             terrainFaces[i] = new TerrainFaces(shapeGenerator, meshFilter[i].mesh, resolution, directions[i]);
+            bool renderFace = faceRenderMask == FaceRenderMask.All || (int)faceRenderMask - 1 == i;
+            meshFilter[i].gameObject.SetActive(renderFace);
         }
     }
     public void GeneratePlanet()
@@ -75,18 +85,26 @@ public class Planeta : MonoBehaviour
 
     void GenerateMesh()
     {
-        foreach (TerrainFaces face in terrainFaces)
+        for (int i = 0; i < 6; i++)
         {
-            face.ConstructMesh();
+            if (meshFilter[i].gameObject.activeSelf)
+            {
+                terrainFaces[i].ConstructMesh();
+            }
         }
     }
 
     void GenerateColors()
     {
-        foreach (MeshFilter m in meshFilter)
+        colourGenerator.UpdateColours();
+        for (int i = 0; i < 6; i++)
         {
-            m.GetComponent<MeshRenderer>().sharedMaterial.color = colorSettings.planetColor;
+            if (meshFilter[i].gameObject.activeSelf)
+            {
+                terrainFaces[i].UpdateUVs(colourGenerator);
+            }
         }
+
     }
 }
 

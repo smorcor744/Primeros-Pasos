@@ -27,6 +27,8 @@ public class TerrainFaces
         int[] triangles = new int[(resolution - 1) * (resolution - 1) * 6];
         int triIndex = 0;
 
+        Vector2[] uvs = mesh.uv;
+
         for (int y = 0; y < resolution; y++)
         {
             for (int x = 0; x < resolution; x++)
@@ -54,6 +56,23 @@ public class TerrainFaces
         mesh.vertices = vertices;
         mesh.triangles = triangles;
         mesh.RecalculateNormals();
+        mesh.uv = uvs;
+    }
+
+    public void UpdateUVs(ColourGenerator colourGenerator)
+    {
+        Vector2[] uvs = new Vector2[resolution * resolution];
+        for (int y = 0; y < resolution; y++)
+        {
+            for (int x = 0; x < resolution; x++)
+            {
+                int i = x + y * resolution;
+                Vector2 percent = new Vector2(x, y) / (resolution - 1);
+                Vector3 pointOnUnitSphere = localUp + (percent.x - 0.5f) * 2 * axisA + (percent.y - 0.5f) * 2 * axisB;
+                uvs[i] = new Vector2(colourGenerator.BiomePercentFromPoint(pointOnUnitSphere), 0);
+            }
+        }
+        mesh.uv = uvs;
     }
 
 }
