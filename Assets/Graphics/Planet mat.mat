@@ -32,7 +32,7 @@ Material:
     m_Floats:
     - _QueueControl: 0
     m_Colors:
-    - _elevationMinMax: {r: 2.72, g: 3.0508554, b: 0, a: 0}
+    - _elevationMinMax: {r: 333, g: 373.50546, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &2612367061253961293

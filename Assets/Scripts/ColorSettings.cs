@@ -8,6 +8,15 @@ public class ColorSettings : ScriptableObject
 
     public Material planetMaterial;
     public BiomeColourSettings biomeColourSettings;
+    
+    [System.Serializable]
+    public class BiomeProps 
+    {
+        public GameObject[] treePrefabs;
+        public GameObject[] rockPrefabs;
+        [Range(0, 1)] public float treeDensity = 0.1f;
+        [Range(0, 1)] public float rockDensity = 0.05f;
+    }
 
     [System.Serializable]
     public class BiomeColourSettings

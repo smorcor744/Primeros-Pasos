@@ -1,8 +1,10 @@
+using System.Collections.Generic;
 using Unity.VectorGraphics;
 using UnityEngine;
 
 public class TerrainFaces
 {
+    
     ShapeGenerations shapeGenerator;
     Mesh mesh;
     int resolution;
@@ -10,12 +12,17 @@ public class TerrainFaces
     Vector3 axisA;
     Vector3 axisB;
 
-    public TerrainFaces(ShapeGenerations shapeGenerator, Mesh mesh, int resolution, Vector3 localUp)
+
+    Transform planetTransform;
+    public List<Matrix4x4> propMatrices = new List<Matrix4x4>();
+
+    public TerrainFaces(ShapeGenerations shapeGenerator, Mesh mesh, int resolution, Vector3 localUp,Transform planetTransform)
     {
         this.shapeGenerator = shapeGenerator;
         this.mesh = mesh;
         this.resolution = resolution;
         this.localUp = localUp;
+        this.planetTransform = planetTransform;
 
         axisA = new Vector3(localUp.y, localUp.z, localUp.x);
         axisB = Vector3.Cross(localUp, axisA);
@@ -73,6 +80,31 @@ public class TerrainFaces
             }
         }
         mesh.uv = uvs;
+    }
+    public void GenerateProps()
+    {
+        propMatrices.Clear();
+
+        // Recorremos los vértices de esta cara
+        for (int i = 0; i < mesh.vertices.Length; i++)
+        {
+            Vector3 localVertexPos = mesh.vertices[i];
+
+            // Probabilidad aleatoria de que haya un árbol en este vértice (ej. 2% de probabilidad)
+            if (Random.value < 0.02f) 
+            {
+                // 1. Posición en el mundo
+                Vector3 worldPos = planetTransform.TransformPoint(localVertexPos);
+                
+                // 2. Rotación apuntando hacia afuera
+                Vector3 upDirection = localVertexPos.normalized;
+                Quaternion rotation = Quaternion.FromToRotation(Vector3.up, upDirection) * planetTransform.rotation;
+                
+                // 3. Empaquetamos en matriz y guardamos (Escala 1,1,1)
+                Matrix4x4 matrix = Matrix4x4.TRS(worldPos, rotation, Vector3.one);
+                propMatrices.Add(matrix);
+            }
+        }
     }
 
 }

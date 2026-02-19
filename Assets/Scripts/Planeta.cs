@@ -1,5 +1,7 @@
 using Unity.VectorGraphics;
 using UnityEngine;
+using System.Collections.Generic;
+
 
 public class Planeta : MonoBehaviour
 {
@@ -23,6 +25,13 @@ public class Planeta : MonoBehaviour
     [SerializeField, HideInInspector]
     MeshFilter[] meshFilter;
     TerrainFaces[] terrainFaces;
+
+    [Header("Props Instancing (GPU)")]
+    public Mesh treeMesh;
+    public Material treeMaterial;
+    
+    private List<Matrix4x4> allTreeMatrices = new List<Matrix4x4>();
+
 
     private void OnValidate()
     {
@@ -52,16 +61,49 @@ public class Planeta : MonoBehaviour
             }
             meshFilter[i].GetComponent<MeshRenderer>().sharedMaterial = colorSettings.planetMaterial;
 
-            terrainFaces[i] = new TerrainFaces(shapeGenerator, meshFilter[i].mesh, resolution, directions[i]);
+            terrainFaces[i] = new TerrainFaces(shapeGenerator, meshFilter[i].mesh, resolution, directions[i], this.transform);
             bool renderFace = faceRenderMask == FaceRenderMask.All || (int)faceRenderMask - 1 == i;
             meshFilter[i].gameObject.SetActive(renderFace);
         }
     }
+
+    void Update()
+    {
+        if (allTreeMatrices.Count > 0 && treeMesh != null && treeMaterial != null)
+        {
+            // DrawMeshInstanced solo puede dibujar de 1023 en 1023. 
+            // Este bucle divide tu lista gigante en trozos de 1023.
+            int batchSize = 1023;
+            for (int i = 0; i < allTreeMatrices.Count; i += batchSize)
+            {
+                int count = Mathf.Min(batchSize, allTreeMatrices.Count - i);
+                List<Matrix4x4> batch = allTreeMatrices.GetRange(i, count);
+                
+                Graphics.DrawMeshInstanced(treeMesh, 0, treeMaterial, batch);
+            }
+        }
+    }
+    
     public void GeneratePlanet()
     {
         Initialize();
         GenerateMesh();
         GenerateColors();
+        GenerateProps();
+    }
+
+    void GenerateProps()
+    {
+        allTreeMatrices.Clear();
+        for (int i = 0; i < 6; i++)
+        {
+            if (meshFilter[i].gameObject.activeSelf)
+            {
+                terrainFaces[i].GenerateProps();
+                // Juntamos las matrices de esta cara en la lista global del planeta
+                allTreeMatrices.AddRange(terrainFaces[i].propMatrices);
+            }
+        }
     }
 
     public void OnShapeSettingsUpdated()
@@ -97,6 +139,7 @@ public class Planeta : MonoBehaviour
     void GenerateColors()
     {
         colourGenerator.UpdateColours();
+        colourGenerator.UpdateElevation(shapeGenerator.elevationMinMax);
         for (int i = 0; i < 6; i++)
         {
             if (meshFilter[i].gameObject.activeSelf)
